@@ -1,6 +1,5 @@
 const socket = io();
 
-// Handle Join Button Click
 document.getElementById('joinBtn').addEventListener('click', () => {
     const fileName = document.getElementById('fileName').value.trim();
     const authCode = document.getElementById('authCode').value.trim();
@@ -19,12 +18,10 @@ document.getElementById('joinBtn').addEventListener('click', () => {
     document.getElementById('editor-container').style.display = 'block';
 });
 
-// Handle Generate Share Link Button Click
 document.getElementById('generateLinkBtn').addEventListener('click', () => {
     socket.emit('generateShareLink');
 });
 
-// Handle Copy Share Link Button Click
 document.getElementById('copyLinkBtn').addEventListener('click', () => {
     const shareLink = document.getElementById('shareLink');
     shareLink.select();
@@ -32,42 +29,98 @@ document.getElementById('copyLinkBtn').addEventListener('click', () => {
     alert('Share link copied to clipboard!');
 });
 
-// Load Document and User Information
-socket.on('loadDocument', ({ text, fileName, authCode }) => {
+// Handle file upload
+document.getElementById('fileUpload').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+        socket.emit('uploadFile', reader.result);
+    };
+    reader.readAsText(file);
+});
+
+// Handle comments
+document.getElementById('addCommentBtn').addEventListener('click', () => {
+    const commentText = document.getElementById('commentText').value;
+    const selectionStart = document.getElementById('editor').selectionStart;
+    const selectionEnd = document.getElementById('editor').selectionEnd;
+    if (commentText) {
+        socket.emit('addComment', {
+            text: commentText,
+            range: [selectionStart, selectionEnd],
+            author: document.getElementById('userName').value
+        });
+        document.getElementById('commentText').value = '';
+    }
+});
+
+// Handle document export
+document.getElementById('exportBtn').addEventListener('click', () => {
+    const format = document.getElementById('exportFormat').value;
+    socket.emit('exportDocument', format);
+});
+
+socket.on('loadDocument', ({ text, fileName, authCode, history, comments }) => {
     document.getElementById('editor').value = text;
     document.getElementById('fileTitle').textContent = fileName;
     document.getElementById('authTitle').textContent = authCode;
-    document.getElementById('status-message').textContent = 'You are now editing this document.';
+    document.getElementById('historyList').innerHTML = history.map(
+        (entry, index) => `<li>Version ${index + 1} - ${new Date(entry.timestamp).toLocaleString()}</li>`
+    ).join('');
+    document.getElementById('commentList').innerHTML = comments.map(
+        comment => `<li>${comment.author}: ${comment.text} [${comment.range.join('-')}]</li>`
+    ).join('');
 });
 
-// Update Document in Real-Time
 document.getElementById('editor').addEventListener('input', () => {
     const text = document.getElementById('editor').value;
     socket.emit('editDocument', text);
 });
 
-// Update Document for Other Users
 socket.on('updateDocument', (text) => {
     document.getElementById('editor').value = text;
 });
 
-// Update Users List
 socket.on('updateUsers', (users) => {
     const userList = document.getElementById('userList');
     userList.innerHTML = '';
     users.forEach(user => {
         const li = document.createElement('li');
-        li.textContent = user;
+        li.textContent = `${user.name} (Cursor: ${user.cursorPos})`;
         userList.appendChild(li);
     });
 });
 
-// Handle Share Link
+socket.on('updateComments', (comments) => {
+    const commentList = document.getElementById('commentList');
+    commentList.innerHTML = comments.map(
+        comment => `<li>${comment.author}: ${comment.text} [${comment.range.join('-')}]</li>`
+    ).join('');
+});
+
+socket.on('notify', (message) => {
+    alert(message);
+});
+
 socket.on('shareLink', (link) => {
     document.getElementById('shareLink').value = `${window.location.origin}/?link=${link}`;
 });
 
-// Join with Share Link
+socket.on('downloadFile', ({ data, format }) => {
+    const blob = new Blob([data], { type: format === 'txt' ? 'text/plain' : 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `document.${format}`;
+    a.click();
+    URL.revokeObjectURL(url);
+});
+
+document.getElementById('editor').addEventListener('mouseup', () => {
+    const cursorPos = document.getElementById('editor').selectionStart;
+    socket.emit('updateCursor', cursorPos);
+});
+
 const queryParams = new URLSearchParams(window.location.search);
 const link = queryParams.get('link');
 if (link) {
