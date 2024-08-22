@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notepad Editor</title>
+    <title>InkPad | Notepad Editor</title>
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app">
+        <header id="header">
+            <img src="logo.png" alt="App Logo" id="logo">
+            <h1>InkPad | Notepad Editor</h1>
+        </header>
         <!-- Login Container -->
         <div id="login-container">
             <h2>Access Your Notepad</h2>
-            <p>Please enter the file name, auth code, and your name to access the notepad. If you don't have an auth code, generate a shareable link.</p>
+            <p>Please enter the file name, auth code, and your name to access the notepad. If you don't have an auth code, generate your own code.</p>
             <div class="input-group">
                 <input type="text" id="fileName" placeholder="File Name">
             </div>
@@ -28,6 +33,9 @@
             <div class="input-group">
                 <input type="text" id="shareLink" placeholder="Shareable Link" readonly>
             </div>
+            <div class="input-group">
+                <input type="file" id="fileUpload">
+            </div>
             <p id="error-message" class="error-message"></p>
         </div>
 
@@ -40,7 +48,24 @@
             </div>
             <h4>Users Currently Editing:</h4>
             <ul id="userList"></ul>
+            <div id="cursorContainer"></div>
             <textarea id="editor" placeholder="Start typing here..."></textarea>
+            <h4>Document History:</h4>
+            <ul id="historyList"></ul>
+            <h4>Comments:</h4>
+            <ul id="commentList"></ul>
+            <div class="input-group">
+                <input type="text" id="commentText" placeholder="Add a comment">
+                <button id="addCommentBtn">Add Comment</button>
+            </div>
+            <div class="input-group">
+                <label for="exportFormat">Export as:</label>
+                <select id="exportFormat">
+                    <option value="txt">TXT</option>
+                    <option value="json">JSON</option>
+                </select>
+                <button id="exportBtn">Export Document</button>
+            </div>
             <p id="status-message" class="status-message"></p>
         </div>
     </div>
