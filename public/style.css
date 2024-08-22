@@ -1,0 +1,147 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e1e1e, #333);
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#app {
+    width: 100%;
+    max-width: 900px;
+}
+
+#login-container, #editor-container {
+    background: #282c34;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 1s ease-in-out;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h2, h3, h4 {
+    color: #61dafb;
+    margin: 0;
+}
+
+p {
+    color: #9a9a9a;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background: #3a3f47;
+    color: #e0e0e0;
+    font-size: 16px;
+}
+
+.input-group input::placeholder {
+    color: #9a9a9a;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+button {
+    background: #61dafb;
+    color: #282c34;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background: #21a1f1;
+    transform: scale(1.05);
+}
+
+.secondary-btn {
+    background: #3a3f47;
+    color: #61dafb;
+}
+
+.secondary-btn:hover {
+    background: #282c34;
+}
+
+textarea {
+    width: 100%;
+    height: 300px;
+    resize: none;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background: #3a3f47;
+    color: #e0e0e0;
+    font-size: 16px;
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+ul#userList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul#userList li {
+    background: #3a3f47;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Error and Status Messages */
+.error-message {
+    color: #ff6f61;
+    font-size: 14px;
+}
+
+.status-message {
+    color: #9a9a9a;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    #login-container, #editor-container {
+        width: 90%;
+        padding: 15px;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

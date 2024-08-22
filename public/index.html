@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notepad Editor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Container -->
+        <div id="login-container">
+            <h2>Access Your Notepad</h2>
+            <p>Please enter the file name, auth code, and your name to access the notepad. If you don't have an auth code, generate a shareable link.</p>
+            <div class="input-group">
+                <input type="text" id="fileName" placeholder="File Name">
+            </div>
+            <div class="input-group">
+                <input type="password" id="authCode" placeholder="Auth Code (if any)">
+            </div>
+            <div class="input-group">
+                <input type="text" id="userName" placeholder="Your Name">
+            </div>
+            <div class="button-group">
+                <button id="joinBtn">Join</button>
+                <button id="generateLinkBtn">Generate Share Link</button>
+            </div>
+            <div class="input-group">
+                <input type="text" id="shareLink" placeholder="Shareable Link" readonly>
+            </div>
+            <p id="error-message" class="error-message"></p>
+        </div>
+
+        <!-- Editor Container -->
+        <div id="editor-container" style="display: none;">
+            <div class="header">
+                <h3>File: <span id="fileTitle"></span></h3>
+                <h4>Auth Code: <span id="authTitle"></span></h4>
+                <button id="copyLinkBtn" class="secondary-btn">Copy Share Link</button>
+            </div>
+            <h4>Users Currently Editing:</h4>
+            <ul id="userList"></ul>
+            <textarea id="editor" placeholder="Start typing here..."></textarea>
+            <p id="status-message" class="status-message"></p>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
